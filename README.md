@@ -1,6 +1,9 @@
 # MG3
 ## Devlog
-Write your Devlog here.
+
+1. The default values for a float, int, bool, and string are 0, 0, false, and an empty string respectively.
+2. The update method gets called every frame by Unity itself. The code only defines what update does. 
+3. Both KickWeapon and TimerText use the Timer class to create timers. TimerText creates a game timer while KickWeapon uses a activation timer. While they are both used differently, each timer is counted down every frame with Update(). The update method subtracts the time left with each time passed each frame (using deltatime). This allows for the timer to decrease while simutaneously handle other tasks including managing kicks or updating the timer text.
 
 ## Open-Source assets
 - [Cat fighter spritesheet](https://opengameart.org/content/cat-fighter-sprite-sheet)

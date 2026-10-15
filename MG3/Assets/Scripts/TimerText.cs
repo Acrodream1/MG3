@@ -12,12 +12,12 @@ public class TimerText : MonoBehaviour
     // STEP 8 -----------------------------------------------------------------
     // This method runs ONCE, when the GAME BEGINS. It is called by Unity.
     // Uncomment this method and fill in the method name.
-    //
-    //private void ???()
-    //{
-            // Inside this method, CALL the BeginTimer method on _gameTimer.
-            // Pass in _maxGameTime as the ARGUMENT.
-    //}
+
+    private void Start() {
+        _gameTimer.StopTime(false);
+        _gameTimer.BeginTimer(_maxGameTime);
+    }
+
     // STEP 8 -----------------------------------------------------------------
 
     // ------------------------------------------------------------------------
@@ -26,7 +26,6 @@ public class TimerText : MonoBehaviour
         // STEP 9 -------------------------------------------------------------
         // Inside this Update method, we're going to CHECK IF OUR TIMER RAN OUT.
         // IF it's done, CALL the GameOver method.
-        // 
         // If you need a hint, check how the KickWeapon class did this.
         // But remember the timer object in this class is _gameTimer.
         //
@@ -35,6 +34,13 @@ public class TimerText : MonoBehaviour
         // STEP 9 -------------------------------------------------------------
 
         _timerDisplay.text = _gameTimer.GetTimeLeft().ToString();
+
+        if (_gameTimer.IsFinished()) {
+            _timerDisplay.text = "0.000";   // Fixes the issue of displaying negative time
+            _gameTimer.StopTime(true);      // Prevents the timer from continuing after a game over
+            GameOver();
+        }
+
     }
     
     // ------------------------------------------------------------------------

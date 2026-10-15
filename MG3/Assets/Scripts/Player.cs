@@ -1,5 +1,6 @@
 using UnityEngine;
 using TMPro;
+using System.Threading.Tasks;
 
 public class Player : MonoBehaviour
 {
@@ -36,12 +37,12 @@ public class Player : MonoBehaviour
         }
 
         // Change character facing 
-        if (Input.GetAxis("Horizontal") < 0 && !_facingLeft)
+        if (Input.GetAxis("Horizontal") < 0 && !_facingLeft && _rightKick.KickCompleted()) // Ensures that the player cannot flip left if they are performing a right kick
         {
             _spriteRenderer.flipX = true;
             _facingLeft = true;
         }
-        else if (Input.GetAxis("Horizontal") > 0 && _facingLeft)
+        else if (Input.GetAxis("Horizontal") > 0 && _facingLeft && _leftKick.KickCompleted()) // Same as the left, but applied to the right kick
         {
             _spriteRenderer.flipX = false;
             _facingLeft = false;
@@ -58,16 +59,22 @@ public class Player : MonoBehaviour
         _animator.SetBool("inAir", _rigidbody.linearVelocity.y != 0.0f);
     }
 
+
     // ------------------------------------------------------------------------
-    public void SetGameOver ()
+    public void SetGameOver()
     {
         this.enabled = false;
     }
 
     // ------------------------------------------------------------------------
     // Activates the colliders that kick objects
-    private void Kick()
+    private async Task Kick()
     {
+        if (!(_leftKick.KickCompleted()) || !(_rightKick.KickCompleted())) // Only one kick can be performed
+        {
+            return;
+        }
+
         if (_facingLeft)
         {
             _leftKick.ActivateKick();
@@ -84,6 +91,8 @@ public class Player : MonoBehaviour
     // This method is called when the player kicks a Kickable item.
     public void IncreasePoints()
     {
+        _points += 1;
+        _pointsText.text = "Points: " + _points;
         // Inside this method, increase the value of _points by one,
         // and update the _pointsText text with text displaying the new value of _points.
         

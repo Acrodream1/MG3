@@ -5,6 +5,8 @@ public class KickWeapon : MonoBehaviour
     [SerializeField] private float _lifetimeSeconds;
     [SerializeField] private Timer _lifeTimer;
 
+    private bool _kickComplete = true;  // Prevents kick spam. Space input is checked every frame and the timer will always reset. A debounce was needed.
+
     // ------------------------------------------------------------------------
     public void ActivateKick()
     {
@@ -17,9 +19,15 @@ public class KickWeapon : MonoBehaviour
         //      to the method in order to start our timer with the number
         //      of seconds that _lifetimeSeconds is set to.
 
-        //_lifeTimer.BeginTimer(_lifetimeSeconds);
+        _kickComplete = false;
+        _lifeTimer.BeginTimer(_lifetimeSeconds);
 
         // STEP 6 -------------------------------------------------------------
+    }
+
+    public bool KickCompleted() // Checks whether or not the kick is completed
+    {
+        return _kickComplete;
     }
 
     // STEP 7 -----------------------------------------------------------------
@@ -28,18 +36,19 @@ public class KickWeapon : MonoBehaviour
     // Uncomment the below method and replace the ???s with the method name.
     // This is a built-in method from Unity that runs EVERY FRAME.
     //
-    //private void ???()
-    //{
-        
-        // In the body of this method, we want to check if the timer has run out,
-        //      and disable the KickWeapon when it's done.
-        // Simply uncomment the lines once you've written the method.
 
-        //if (_lifeTimer.IsFinished())
-        //{
-        //     gameObject.SetActive(false);
-        //}
 
-    //}
+    private void Update() {
+       if (_lifeTimer.IsFinished()) {
+            gameObject.SetActive(false);
+            _kickComplete = true;
+       }
+    }
+
+
+
+    // In the body of this method, we want to check if the timer has run out,
+    //      and disable the KickWeapon when it's done.
+    // Simply uncomment the lines once you've written the method.
     // STEP 7 -----------------------------------------------------------------
 }

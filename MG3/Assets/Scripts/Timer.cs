@@ -10,7 +10,8 @@ public class Timer : MonoBehaviour
     //
     // Make sure to TUNE this value in the INSPECTOR after you create it!
 
-    //private ??? ???;
+    [SerializeField] private float timeLeft = 0.0f;
+    [SerializeField] private bool stopTime = false;
 
     // STEP 1 -----------------------------------------------------------------
 
@@ -23,12 +24,9 @@ public class Timer : MonoBehaviour
     //      should start with.
     // It does not have any output.
     // 
-    //public ??? BeginTimer(??? ???)
-    //{
-        // Inside the method here, set the value of our timer member variable to
-        // the countdown start time parameter.
-
-    //}
+    public void BeginTimer(float startTime) {  // stopTime can be set here as false, but I want to give StopTime() more appreciation.
+        timeLeft = startTime;
+    }
 
     // STEP 2 -----------------------------------------------------------------
 
@@ -41,16 +39,18 @@ public class Timer : MonoBehaviour
     //
     // The method's name is a built-in one from Unity that runs EVERY FRAME.
     // It has no input or output.
-    //
-    //private ??? ???()
-    //{
+
+    private void Update() {
+        if (!stopTime)
+        {
+            timeLeft -= Time.deltaTime;
+        }
+    }
+
     // Time.deltaTime is a variable provided to us by Unity that represents
     //      how much time has passed since the last frame.
     // In this method body, use Time.deltaTime to decrease the the value of 
     //      our timer member variable every frame.
-
-
-    //}
 
     // This method can be used to check the value of your time member variable.
     public float GetTimeLeft()
@@ -58,7 +58,7 @@ public class Timer : MonoBehaviour
         // STEP 4 -------------------------------------------------------------
         // REPLACE this line with a new line of code that reutrns the value of
         //      your time member variable.
-        return 0;
+        return timeLeft;
         // STEP 4 -------------------------------------------------------------
     }
 
@@ -68,7 +68,15 @@ public class Timer : MonoBehaviour
     // Other classes can CALL this method to check if the timer is up.
     // It should be public, and has no input.
     
+    public bool IsFinished() {
+        return timeLeft <= 0;
+    }
 
+
+    public void StopTime(bool enabled)  // Allows for the timer to pause or play
+    {
+        stopTime = enabled;
+    }
 
     // STEP 5 -----------------------------------------------------------------
 }
